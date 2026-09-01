@@ -63,3 +63,23 @@ test("adds a visible review note", () => {
   handlers.leave_review_note({ note: "Separate documented evidence from interpretation." });
   assert.equal(getState().workspace.note, "Separate documented evidence from interpretation.");
 });
+
+test("records a bounded source request without inventing a source", () => {
+  const { handlers, getState, activity } = createHarness();
+  const result = handlers.request_additional_source({
+    topic: "Panamanian perspectives",
+    question: "Find a source that centers Panamanian perspectives on sovereignty.",
+  });
+  assert.equal(result.sourceRequest.status, "Open");
+  assert.equal(getState().workspace.reviewStatus, "Needs source");
+  assert.equal(getState().workspace.sourceRequest.topic, "Panamanian perspectives");
+  assert.equal(activity.at(-1).tool, "request_additional_source");
+});
+
+test("rejects an empty source request", () => {
+  const { handlers } = createHarness();
+  assert.throws(
+    () => handlers.request_additional_source({ topic: "", question: "" }),
+    /Provide a topic/,
+  );
+});

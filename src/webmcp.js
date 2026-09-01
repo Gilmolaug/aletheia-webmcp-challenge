@@ -88,6 +88,20 @@ export const toolDefinitions = [
       additionalProperties: false,
     },
   },
+  {
+    name: "request_additional_source",
+    title: "Request another source",
+    description: "Record a bounded evidence gap for human review. This creates a visible request but does not attach or invent a source.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        topic: { type: "string", minLength: 1, maxLength: 80, description: "Short label for the missing perspective or evidence area." },
+        question: { type: "string", minLength: 1, maxLength: 320, description: "What evidence should be found and why the current set is incomplete." },
+      },
+      required: ["topic", "question"],
+      additionalProperties: false,
+    },
+  },
 ];
 
 export async function registerWebMcpTools(handlers) {

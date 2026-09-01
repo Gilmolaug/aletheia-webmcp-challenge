@@ -2,6 +2,8 @@
 
 A WebMCP-enabled evidence workspace where a person and an agent review the same sources, claim, citations, and approval state on one live page.
 
+**Live prototype:** [Open Aletheia Evidence Desk](https://gilmolaug.github.io/aletheia-webmcp-challenge/)
+
 ## Why WebMCP
 
 A remote MCP server can search a service, but this product depends on shared page context. The agent can inspect the open workspace, search a known evidence set, focus excerpts in the human's canvas, and add a claim proposal that remains unaccepted until the person reviews it.
@@ -36,12 +38,19 @@ pnpm preview
 | `propose_claim_revision` | Adds an unaccepted claim proposal and rationale |
 | `leave_review_note` | Adds a visible review instruction |
 | `set_source_focus` | Selects a source in the left rail |
+| `request_additional_source` | Opens a bounded research request without inventing evidence |
 
 Tool descriptions and outputs are kept concise. Read-only and untrusted-content annotations are applied where appropriate. Runtime validation returns actionable recovery guidance.
 
 ## Demo prompt
 
 > Use the sources on this page to strengthen the working claim. Keep labor inequality and public health visible, and show me the evidence before anything is accepted.
+
+For a self-contained review, choose **Start live review** in the Agent Workspace. The interface runs the same search, focus, proposal, note, and source-selection handlers exposed through WebMCP, then stops at the human approval boundary. Reviewers can also inspect the Sources and Review views, request another source, accept the proposed claim as a draft, and export a JSON review packet.
+
+## Publish the prototype
+
+Pushing `main` runs tests, builds the app with the repository path, and deploys `dist` through GitHub Pages. In the repository's **Settings → Pages**, choose **GitHub Actions** as the source the first time the site is published.
 
 ## Evidence integrity
 

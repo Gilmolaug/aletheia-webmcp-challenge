@@ -93,6 +93,7 @@ export const initialWorkspace = {
   reviewStatus: "Needs human review",
   selectedSourceId: "uf-health",
   focusedEvidenceIds: ["health-success", "segregated-rolls", "economic-power"],
+  sourceRequest: null,
 };
 
 export const seedActivity = [

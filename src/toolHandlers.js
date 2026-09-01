@@ -23,6 +23,7 @@ export function createToolHandlers({ getState, updateState, addActivity }) {
       reviewStatus: state.workspace.reviewStatus,
       selectedSourceId: state.workspace.selectedSourceId,
       focusedEvidenceIds: state.workspace.focusedEvidenceIds,
+      sourceRequest: state.workspace.sourceRequest ?? null,
     };
   };
 
@@ -146,6 +147,28 @@ export function createToolHandlers({ getState, updateState, addActivity }) {
     return { sourceId: cleanId, source: source.name, visibleChange: "The source is selected in the left rail." };
   };
 
+  const requestAdditionalSource = ({ topic, question }) => {
+    const cleanTopic = normalize(topic);
+    const cleanQuestion = normalize(question);
+    if (!cleanTopic) throw new Error("Provide a topic for the source request.");
+    if (cleanTopic.length > 80) throw new Error("Keep the source-request topic at 80 characters or fewer.");
+    if (!cleanQuestion) throw new Error("Describe the evidence gap or research question.");
+    if (cleanQuestion.length > 320) throw new Error("Keep the source request at 320 characters or fewer.");
+
+    const sourceRequest = { topic: cleanTopic, question: cleanQuestion, status: "Open" };
+    updateState((previous) => ({
+      ...previous,
+      workspace: { ...previous.workspace, sourceRequest, reviewStatus: "Needs source" },
+    }));
+    addActivity("request_additional_source", `Recorded an open source request about ${cleanTopic}.`);
+
+    return {
+      sourceRequest,
+      visibleChange: "The open evidence gap is now visible in the Review view.",
+      nextStep: "Search for a relevant source, then present it for human review before attaching it.",
+    };
+  };
+
   return {
     list_sources: listSources,
     get_workspace_state: getWorkspaceState,
@@ -154,5 +177,6 @@ export function createToolHandlers({ getState, updateState, addActivity }) {
     propose_claim_revision: proposeClaimRevision,
     leave_review_note: leaveReviewNote,
     set_source_focus: setSourceFocus,
+    request_additional_source: requestAdditionalSource,
   };
 }
