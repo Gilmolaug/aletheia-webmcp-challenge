@@ -50,6 +50,8 @@ For a self-contained review, choose **Start live review** in the Agent Workspace
 
 Desk, Sources, and Review are link-addressable at `#/desk`, `#/sources`, and `#/review`. The links work on localhost and GitHub Pages, support direct entry, and participate in browser Back and Forward navigation.
 
+Source rows, source-summary cards, evidence excerpts, catalog titles, and coverage rows link directly to their checked institutional material in a new tab, leaving the live review workspace intact.
+
 ## Publish the prototype
 
 Pushing `main` runs tests, builds the app with the repository path, and deploys `dist` through GitHub Pages. In the repository's **Settings → Pages**, choose **GitHub Actions** as the source the first time the site is published.

@@ -3,12 +3,12 @@ import {
   BookOpen,
   Check,
   CheckCircle2,
-  ChevronRight,
   CircleAlert,
   Download,
   FileSearch,
   FileText,
   Filter,
+  ExternalLink,
   History,
   Library,
   Menu,
@@ -137,24 +137,33 @@ function SourceRail({ selectedSourceId, onSelect, mobileOpen, onRequestSource })
         {filteredSources.map((source) => {
           const selected = selectedSourceId === source.id;
           return (
-            <button key={source.id} type="button" className={`source-row ${selected ? "selected" : ""}`} aria-pressed={selected} onClick={() => onSelect(source.id)}>
+            <a
+              key={source.id}
+              href={source.url}
+              target="_blank"
+              rel="noreferrer"
+              className={`source-row ${selected ? "selected" : ""}`}
+              aria-current={selected ? "true" : undefined}
+              title={`Open ${source.name}`}
+              onClick={() => onSelect(source.id)}
+            >
               <span className="source-icon"><Library size={19} strokeWidth={1.6} /></span>
               <span className="source-copy">
                 <strong>{source.shortName}</strong>
                 <small>{source.institution}</small>
               </span>
-              <ChevronRight size={16} />
-            </button>
+              <ExternalLink size={15} aria-hidden="true" />
+            </a>
           );
         })}
         {filteredSources.length === 0 ? <p className="empty-filter">No checked source matches “{query}”.</p> : null}
       </div>
-      <div className="source-summary">
+      <a className="source-summary" href={selectedSource.url} target="_blank" rel="noreferrer" title={`Open ${selectedSource.name}`}>
         <FileSearch size={18} />
         <small>{selectedSource.kind}</small>
         <p>{selectedSource.summary}</p>
-        <a href={selectedSource.url} target="_blank" rel="noreferrer">Open source</a>
-      </div>
+        <span className="source-link-label">Open source ↗</span>
+      </a>
       <button className="filter-button" type="button" aria-expanded={filterOpen} onClick={() => setFilterOpen((open) => !open)}>
         <Filter size={16} />
         {filterOpen ? "Hide filter" : "Filter sources"}
@@ -166,11 +175,14 @@ function SourceRail({ selectedSourceId, onSelect, mobileOpen, onRequestSource })
 function EvidenceItem({ item, index, focused, selected, onSelect }) {
   const source = sourceById.get(item.sourceId);
   return (
-    <button
-      type="button"
+    <a
+      href={source.url}
+      target="_blank"
+      rel="noreferrer"
       className={`evidence-item ${focused ? "focused" : ""} ${selected ? "active" : ""}`}
       onClick={() => onSelect(item)}
-      aria-pressed={selected}
+      aria-current={selected ? "true" : undefined}
+      title={`Open source: ${source.name}`}
     >
       <span className="evidence-number">{String(index + 1).padStart(2, "0")}</span>
       <span className="evidence-copy">
@@ -183,7 +195,7 @@ function EvidenceItem({ item, index, focused, selected, onSelect }) {
       <span className="evidence-state" aria-hidden="true">
         {focused ? <CheckCircle2 size={19} /> : <span />}
       </span>
-    </button>
+    </a>
   );
 }
 
@@ -271,7 +283,7 @@ function SourcesCanvas({ workspace, onSelectSource }) {
             <article className={`source-card ${selected ? "selected" : ""}`} key={source.id}>
               <div className="source-card-heading">
                 <span><Library size={18} /></span>
-                <div><small>{source.kind}</small><h2>{source.name}</h2></div>
+                <div><small>{source.kind}</small><h2><a href={source.url} target="_blank" rel="noreferrer">{source.name}</a></h2></div>
               </div>
               <p>{source.summary}</p>
               <ul>{items.map((item) => <li key={item.id}>{item.locator}</li>)}</ul>
@@ -396,12 +408,12 @@ function AgentWorkspace({ workspace, onAccept, onRequestSource, onLeaveNote, web
         </div>
         <div className="coverage-list">
           {sources.map((source) => (
-            <div key={source.id}>
+            <a key={source.id} href={source.url} target="_blank" rel="noreferrer" title={`Open ${source.name}`}>
               <Library size={15} />
               <span>{source.shortName}</span>
               <strong>{source.coverage}</strong>
               <CheckCircle2 size={17} />
-            </div>
+            </a>
           ))}
         </div>
       </section>
