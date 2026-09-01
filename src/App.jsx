@@ -43,8 +43,15 @@ const DEMO_RATIONALE =
   "The focused evidence links disease control to construction success, documents segregated labor conditions, and places the canal within U.S. economic and diplomatic power.";
 const DEMO_NOTE = "Keep the labor story visible, and distinguish documented evidence from interpretation.";
 const DEMO_STEPS = ["Search", "Focus", "Draft", "Qualify", "Handoff"];
+const VIEW_HASHES = { desk: "#/desk", sources: "#/sources", review: "#/review" };
+const VALID_VIEWS = new Set(Object.keys(VIEW_HASHES));
 
 const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
+
+function viewFromLocation() {
+  const candidate = window.location.hash.replace(/^#\/?/, "");
+  return VALID_VIEWS.has(candidate) ? candidate : "desk";
+}
 
 function createFreshState() {
   return {
@@ -70,23 +77,23 @@ function Header({ activeView, onViewChange, onExport, mobileOpen, setMobileOpen 
       <button className="mobile-menu" type="button" aria-label="Toggle source rail" onClick={() => setMobileOpen(!mobileOpen)}>
         {mobileOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
-      <button className="brand" type="button" aria-label="Aletheia evidence desk home" onClick={() => onViewChange("desk")}>
+      <a className="brand" href={VIEW_HASHES.desk} aria-label="Aletheia evidence desk home" title="Desk home" onClick={() => onViewChange("desk")}>
         <span className="brand-mark">A</span>
         <span className="brand-name">Aletheia</span>
-      </button>
+      </a>
       <nav className="primary-nav" aria-label="Workspace views">
         {[
           ["desk", BookOpen, "Desk"],
           ["sources", FileText, "Sources"],
           ["review", ShieldCheck, "Review"],
         ].map(([id, Icon, label]) => (
-          <button key={id} type="button" className={activeView === id ? "active" : ""} aria-label={`${label} view`} aria-pressed={activeView === id} onClick={() => onViewChange(id)}>
+          <a key={id} href={VIEW_HASHES[id]} className={activeView === id ? "active" : ""} aria-label={`${label} view`} title={`${label} view`} aria-current={activeView === id ? "page" : undefined} onClick={() => onViewChange(id)}>
             <Icon size={18} strokeWidth={1.7} />
             <span>{label}</span>
-          </button>
+          </a>
         ))}
       </nav>
-      <button className="export-button" type="button" aria-label="Export review packet" onClick={onExport}>
+      <button className="export-button" type="button" aria-label="Export review packet" title="Export review packet" onClick={onExport}>
         <Download size={18} />
         <span>Export review</span>
       </button>
@@ -269,7 +276,7 @@ function SourcesCanvas({ workspace, onSelectSource }) {
               <p>{source.summary}</p>
               <ul>{items.map((item) => <li key={item.id}>{item.locator}</li>)}</ul>
               <div className="source-card-actions">
-                <button type="button" onClick={() => onSelectSource(source.id)}>{selected ? "Focused in desk" : "Focus in desk"}</button>
+                <a href={VIEW_HASHES.desk} onClick={() => onSelectSource(source.id)}>{selected ? "Focused in desk" : "Focus in desk"}</a>
                 <a href={source.url} target="_blank" rel="noreferrer">Open institution ↗</a>
               </div>
             </article>
@@ -320,7 +327,7 @@ function ReviewCanvas({ workspace, onReturnToDesk, onExport }) {
         </section>
       ) : null}
       <div className="view-actions">
-        <button type="button" onClick={onReturnToDesk}><BookOpen size={17} />Return to evidence desk</button>
+        <a href={VIEW_HASHES.desk} onClick={onReturnToDesk}><BookOpen size={17} />Return to evidence desk</a>
         <button className="primary-action" type="button" onClick={onExport}><Download size={17} />Export review packet</button>
       </div>
     </main>
@@ -508,7 +515,7 @@ function Toast({ message }) {
 
 export default function App() {
   const [state, setState] = useState(loadInitialState);
-  const [activeView, setActiveView] = useState("desk");
+  const [activeView, setActiveView] = useState(viewFromLocation);
   const [activeEvidenceId, setActiveEvidenceId] = useState(state.workspace.focusedEvidenceIds[0]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [toast, setToast] = useState("");
@@ -572,8 +579,23 @@ export default function App() {
 
   useEffect(() => () => clearTimeout(toastTimerRef.current), []);
 
+  useEffect(() => {
+    const syncViewToLocation = () => {
+      const nextView = viewFromLocation();
+      if (window.location.hash !== VIEW_HASHES[nextView]) {
+        window.history.replaceState(null, "", VIEW_HASHES[nextView]);
+      }
+      setActiveView(nextView);
+    };
+    syncViewToLocation();
+    window.addEventListener("hashchange", syncViewToLocation);
+    return () => window.removeEventListener("hashchange", syncViewToLocation);
+  }, []);
+
   const switchView = useCallback((view) => {
-    setActiveView(view);
+    const nextView = VALID_VIEWS.has(view) ? view : "desk";
+    if (window.location.hash !== VIEW_HASHES[nextView]) window.location.hash = VIEW_HASHES[nextView];
+    setActiveView(nextView);
     setMobileOpen(false);
   }, []);
 

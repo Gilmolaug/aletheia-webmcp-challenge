@@ -88,7 +88,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid rgba(12, 97, 73, 0.26
 .brand-name { font-family: var(--serif); font-size: 31px; letter-spacing: -0.04em; }
 
 .primary-nav { display: flex; align-items: stretch; padding-left: 32px; gap: 9px; }
-.primary-nav button {
+.primary-nav a {
   position: relative;
   display: flex;
   align-items: center;
@@ -97,10 +97,12 @@ button:focus-visible, a:focus-visible { outline: 3px solid rgba(12, 97, 73, 0.26
   padding: 0 18px;
   border: 0;
   background: transparent;
+  color: inherit;
   font-size: 15px;
+  text-decoration: none;
   cursor: pointer;
 }
-.primary-nav button::after {
+.primary-nav a::after {
   content: "";
   position: absolute;
   right: 12px;
@@ -111,7 +113,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid rgba(12, 97, 73, 0.26
   background: var(--ink);
   transition: transform 180ms ease;
 }
-.primary-nav button.active::after, .primary-nav button:hover::after { transform: scaleX(1); }
+.primary-nav a.active::after, .primary-nav a:hover::after { transform: scaleX(1); }
 
 .export-button {
   align-self: center;
@@ -426,7 +428,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid rgba(12, 97, 73, 0.26
 .source-gap-card > div { display: flex; align-items: center; gap: 8px; color: #6c4a18; font-size: 12px; }
 .source-gap-card p { margin: 8px 0 0; color: #65543b; font-size: 11px; }
 .view-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 18px; }
-.view-actions button { display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 15px; border: 1px solid var(--jade); border-radius: 3px; background: var(--surface); color: var(--jade-dark); font-size: 11px; font-weight: 700; cursor: pointer; }
+.view-actions button, .view-actions a { display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 0 15px; border: 1px solid var(--jade); border-radius: 3px; background: var(--surface); color: var(--jade-dark); font-size: 11px; font-weight: 700; cursor: pointer; text-decoration: none; }
 .view-actions .primary-action { background: var(--jade-dark); color: white; }
 
 .activity-strip {
@@ -500,7 +502,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid rgba(12, 97, 73, 0.26
   .topbar { grid-template-columns: 230px minmax(0, 1fr) auto auto; }
   .brand-name { font-size: 27px; }
   .primary-nav { padding-left: 15px; }
-  .primary-nav button { min-width: 91px; padding: 0 11px; }
+  .primary-nav a { min-width: 91px; padding: 0 11px; }
   .claim-row { grid-template-columns: minmax(0, 1fr) 128px; }
   .agent-workspace { padding-inline: 18px; }
   .source-catalog { grid-template-columns: 1fr; }
@@ -515,9 +517,9 @@ button:focus-visible, a:focus-visible { outline: 3px solid rgba(12, 97, 73, 0.26
   .brand-mark { width: 37px; height: 37px; font-size: 23px; }
   .brand-name { display: none; }
   .primary-nav { display: flex; min-width: 0; justify-content: center; gap: 2px; padding-left: 0; }
-  .primary-nav button { min-width: 44px; padding: 0 11px; }
-  .primary-nav button span { display: none; }
-  .primary-nav button::after { right: 7px; left: 7px; }
+  .primary-nav a { min-width: 44px; padding: 0 11px; }
+  .primary-nav a span { display: none; }
+  .primary-nav a::after { right: 7px; left: 7px; }
   .export-button { margin-right: 10px; padding: 10px 13px; }
   .export-button span { display: none; }
   .avatar { display: none; }

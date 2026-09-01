@@ -48,6 +48,8 @@ Tool descriptions and outputs are kept concise. Read-only and untrusted-content 
 
 For a self-contained review, choose **Start live review** in the Agent Workspace. The interface runs the same search, focus, proposal, note, and source-selection handlers exposed through WebMCP, then stops at the human approval boundary. Reviewers can also inspect the Sources and Review views, request another source, accept the proposed claim as a draft, and export a JSON review packet.
 
+Desk, Sources, and Review are link-addressable at `#/desk`, `#/sources`, and `#/review`. The links work on localhost and GitHub Pages, support direct entry, and participate in browser Back and Forward navigation.
+
 ## Publish the prototype
 
 Pushing `main` runs tests, builds the app with the repository path, and deploys `dist` through GitHub Pages. In the repository's **Settings → Pages**, choose **GitHub Actions** as the source the first time the site is published.
